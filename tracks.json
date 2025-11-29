@@ -1,0 +1,57 @@
+// data/tracks.json
+[
+  {
+    "id": "t001",
+    "title": "Midnight Glow",
+    "artist": "Nova Blue",
+    "mood": "chill",
+    "tags": ["lofi", "ambient", "soft-keys", "late-night"],
+    "cover": "assets/cover.jpg",
+    "lyrics": "Floating through a neon night\nCity lights and quiet skies\nBreathing slow, we find our time\nIn the hush of midnight glow"
+  },
+  {
+    "id": "t002",
+    "title": "Sunbeam Smile",
+    "artist": "Gold Leaf",
+    "mood": "happy",
+    "tags": ["pop", "uplifting", "acoustic", "bright"],
+    "cover": "assets/cover.jpg",
+    "lyrics": "You’re a sunbeam in a rainy town\nSpinning color all around\nEvery laugh a little light\nHold me in your summer sound"
+  },
+  {
+    "id": "t003",
+    "title": "Circuit Focus",
+    "artist": "Data Drift",
+    "mood": "focus",
+    "tags": ["instrumental", "minimal", "steady", "electronic"],
+    "cover": "assets/cover.jpg",
+    "lyrics": "Lines of code and sparks of calm\nRhythms keep the mind embalm\nSilent drive, the thoughts align\nFocus finds a steady line"
+  },
+  {
+    "id": "t004",
+    "title": "Afterparty Echoes",
+    "artist": "Neon Tide",
+    "mood": "party",
+    "tags": ["dance", "house", "bass", "club"],
+    "cover": "assets/cover.jpg",
+    "lyrics": "Basslines blur the city’s glow\nFeet on fire, hearts in flow\nEchoes dance till dawn’s embrace\nLose yourself in neon lace"
+  },
+  {
+    "id": "t005",
+    "title": "Paper Hearts",
+    "artist": "Violet Rue",
+    "mood": "heartbreak",
+    "tags": ["ballad", "piano", "slow", "emotional"],
+    "cover": "assets/cover.jpg",
+    "lyrics": "We fold our words in paper hearts\nInk that stains and falls apart\nYour name drifts through empty rooms\nLove that fades in quiet blooms"
+  },
+  {
+    "id": "t006",
+    "title": "Iron Pulse",
+    "artist": "Kinetic Sun",
+    "mood": "workout",
+    "tags": ["EDM", "high-energy", "drums", "rush"],
+    "cover": "assets/cover.jpg",
+    "lyrics": "Steel and sweat, a rising beat\nPush the ground beneath your feet\nFire the will, ignite the run\nPower up—another one"
+  }
+]
