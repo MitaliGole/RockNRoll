@@ -1,0 +1,118 @@
+<!-- recommend.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vibe Wave — Recommendations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <img src="assets/logo.svg" alt="Vibe Wave" class="logo">
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="recommend.html" class="active">Recommendations</a>
+      <a href="lyrics.html">Lyrics</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="toolbar">
+      <h1>Recommendations</h1>
+      <div class="controls">
+        <label>
+          <span>Mood</span>
+          <select id="mood-select">
+            <option value="">All</option>
+            <option value="chill">Chill</option>
+            <option value="happy">Happy</option>
+            <option value="focus">Focus</option>
+            <option value="party">Party</option>
+            <option value="heartbreak">Heartbreak</option>
+            <option value="workout">Workout</option>
+          </select>
+        </label>
+        <label>
+          <span>Seed track</span>
+          <select id="seed-select"></select>
+        </label>
+        <button id="shuffle-btn">Shuffle my vibe 🎵</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Your picks</h2>
+      <div id="rec-list" class="card-grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>Fine-tuned by your mood, not just metadata.</small>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    let tracks = [];
+
+    function similarity(aTags, bTags) {
+      const a = new Set(aTags), b = new Set(bTags);
+      const intersect = [...a].filter(t => b.has(t)).length;
+      const denom = Math.sqrt(a.size) * Math.sqrt(b.size);
+      return denom ? intersect / denom : 0;
+    }
+
+    async function updateRecommendations() {
+      const mood = document.getElementById('mood-select').value;
+      const seedId = document.getElementById('seed-select').value;
+      const seed = tracks.find(t => t.id === seedId);
+
+      let pool = tracks;
+      if (mood) pool = pool.filter(t => t.mood === mood);
+
+      let ranked = pool;
+      if (seed) {
+        ranked = pool
+          .filter(t => t.id !== seed.id)
+          .map(t => ({ track: t, score: similarity(seed.tags, t.tags) }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 12)
+          .map(x => x.track);
+      } else {
+        ranked = pool.slice(0, 12);
+      }
+
+      renderCards(ranked, document.getElementById('rec-list'));
+    }
+
+    (async function init() {
+      tracks = await loadTracks();
+
+      // Populate seed options
+      const seedSelect = document.getElementById('seed-select');
+      seedSelect.innerHTML = '<option value="">None</option>' +
+        tracks.map(t => `<option value="${t.id}">${t.title} — ${t.artist}</option>`).join('');
+
+      // Set mood from storage
+      const storedMood = getUserMood();
+      if (storedMood) document.getElementById('mood-select').value = storedMood;
+
+      // Events
+      document.getElementById('mood-select').addEventListener('change', e => {
+        setUserMood(e.target.value);
+        updateRecommendations();
+      });
+      document.getElementById('seed-select').addEventListener('change', updateRecommendations);
+      document.getElementById('shuffle-btn').addEventListener('click', () => {
+        const moods = ['chill', 'happy', 'focus', 'party', 'heartbreak', 'workout'];
+        const mood = moods[Math.floor(Math.random() * moods.length)];
+        document.getElementById('mood-select').value = mood;
+        setUserMood(mood);
+        updateRecommendations();
+      });
+
+      updateRecommendations();
+    })();
+  </script>
+</body>
+</html>
