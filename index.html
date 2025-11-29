@@ -1,0 +1,63 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vibe Wave — Find your vibe, feel the lyrics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <img src="assets/logo.svg" alt="Vibe Wave" class="logo">
+    <nav class="nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="recommend.html">Recommendations</a>
+      <a href="lyrics.html">Lyrics</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Vibe Wave</h1>
+      <p>Spin the dial on your mood. Discover beats that feel like you.</p>
+      <div class="mood-grid">
+        <button class="mood-btn" data-mood="chill">Chill</button>
+        <button class="mood-btn" data-mood="happy">Happy</button>
+        <button class="mood-btn" data-mood="focus">Focus</button>
+        <button class="mood-btn" data-mood="party">Party</button>
+        <button class="mood-btn" data-mood="heartbreak">Heartbreak</button>
+        <button class="mood-btn" data-mood="workout">Workout</button>
+      </div>
+    </section>
+
+    <section class="featured">
+      <h2>Featured tracks</h2>
+      <div id="featured-list" class="card-grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>© Vibe Wave. Where beats meet poetry.</small>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Load featured on homepage
+    (async function init() {
+      const data = await loadTracks();
+      const featured = data.slice(0, 6);
+      renderCards(featured, document.getElementById('featured-list'));
+
+      // Mood buttons: save mood, redirect to recommendations
+      document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setUserMood(btn.dataset.mood);
+          window.location.href = 'recommend.html';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
