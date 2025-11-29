@@ -1,0 +1,92 @@
+<!-- lyrics.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vibe Wave — Lyrics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <img src="assets/logo.svg" alt="Vibe Wave" class="logo">
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="recommend.html">Recommendations</a>
+      <a href="lyrics.html" class="active">Lyrics</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="toolbar">
+      <h1>Lyrics explorer</h1>
+      <div class="controls">
+        <input id="search-input" type="text" placeholder="Search by song, artist, or lyric line">
+        <button id="search-btn">Search</button>
+      </div>
+    </section>
+
+    <section class="two-col">
+      <div>
+        <h2>Results</h2>
+        <ul id="result-list" class="list"></ul>
+      </div>
+      <div>
+        <h2>Lyrics</h2>
+        <div id="lyrics-box" class="lyrics-box">Select a track to view lyrics</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>Sing it. Feel it. Share it.</small>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    let tracks = [];
+
+    function highlight(text, query) {
+      if (!query) return text;
+      const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      return text.replace(re, match => `<mark>${match}</mark>`);
+    }
+
+    function renderResults(items, q) {
+      const list = document.getElementById('result-list');
+      list.innerHTML = '';
+      items.forEach(t => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${highlight(t.title, q)}</strong> — ${highlight(t.artist, q)}`;
+        li.addEventListener('click', () => {
+          document.getElementById('lyrics-box').innerHTML = t.lyrics
+            .split('\n').map(line => `<p>${highlight(line, q)}</p>`).join('');
+        });
+        list.appendChild(li);
+      });
+    }
+
+    function search(q) {
+      q = q.trim();
+      if (!q) { renderResults(tracks.slice(0, 10), ''); return; }
+      const items = tracks.filter(t =>
+        t.title.toLowerCase().includes(q.toLowerCase()) ||
+        t.artist.toLowerCase().includes(q.toLowerCase()) ||
+        t.lyrics.toLowerCase().includes(q.toLowerCase())
+      ).slice(0, 30);
+      renderResults(items, q);
+    }
+
+    (async function init() {
+      tracks = await loadTracks();
+      renderResults(tracks.slice(0, 10), '');
+      document.getElementById('search-btn').addEventListener('click', () => {
+        search(document.getElementById('search-input').value);
+      });
+      document.getElementById('search-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') search(e.target.value);
+      });
+    })();
+  </script>
+</body>
+</html>
